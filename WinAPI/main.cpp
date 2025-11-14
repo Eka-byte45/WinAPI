@@ -22,11 +22,31 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
-	case WM_INITDIALOG:	//Выполняется один раз при запуске окна
+	case WM_INITDIALOG://Выполняется один раз при запуске окна
+		
+	{ 
+		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
+		SendMessage(hwnd, WM_SETICON, 0, (LPARAM)hIcon);
+		//SetFocus(GetDlgItem(hwnd, IDC_EDIT_LOGIN));
+		//SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WN_SETFOCUS, GetDlgItem(hwnd, IDOK), NULL);
+	}
 		break;
 	case WM_COMMAND: //обрабатывает комманды с клавиатуры и мыши
 		switch (LOWORD(wParam))
 		{
+			
+		case IDC_BUTTON_COPY:
+		{
+			CONST INT SIZE = 256;
+			CHAR sz_buffer[SIZE] = {};
+			HWND hEditLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
+			HWND hEditPassword = GetDlgItem(hwnd,IDC_EDIT_PASSWORD);
+			SendMessage(hEditLogin, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
+			SendMessage(hEditPassword, WM_SETTEXT, 0, (LPARAM)sz_buffer);
+
+		}
+			
+		break;
 		case IDOK:
 			MessageBox(NULL, "Была нажата кнопка 'ОК' ", "Info", MB_OK | MB_ICONINFORMATION);
 			break;
