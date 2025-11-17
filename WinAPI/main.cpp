@@ -1,6 +1,8 @@
 #include<Windows.h>
 #include"resource.h"
 
+CONST CHAR LOGIN[] = "Введите имя пользователя";
+
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
@@ -20,6 +22,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	static BOOL isEmptyLoginField = TRUE;
 	switch (uMsg)
 	{
 	case WM_INITDIALOG://Выполняется один раз при запуске окна
@@ -27,6 +30,10 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{ 
 		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
 		SendMessage(hwnd, WM_SETICON, 0, (LPARAM)hIcon);
+
+		HWND hEditLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
+		SendMessage(hEditLogin, WM_SETTEXT, 0, (LPARAM)LOGIN);
+
 		//SetFocus(GetDlgItem(hwnd, IDC_EDIT_LOGIN));
 		//SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WN_SETFOCUS, GetDlgItem(hwnd, IDOK), NULL);
 	}
@@ -46,6 +53,34 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		}
 			
+		break;
+		case IDC_EDIT_LOGIN:
+		{
+			CONST INT SIZE = 256;
+			CHAR textBuffer[SIZE] = {};
+			HWND hEditLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
+
+			if (HIWORD(wParam) == EN_SETFOCUS)
+			{
+				SendMessage(hEditLogin, WM_GETTEXT, SIZE, (LPARAM)textBuffer);
+				if (!strcmp(textBuffer, LOGIN))
+				{
+					SendMessage(hEditLogin, WM_SETTEXT, 0, (LPARAM)"");
+					isEmptyLoginField = FALSE;
+				}
+				
+			}
+			else if (HIWORD(wParam) == EN_KILLFOCUS)
+			{
+				SendMessage(hEditLogin, WM_GETTEXT, SIZE, (LPARAM)textBuffer);
+				if (*textBuffer == '\0')
+				{
+					SendMessage(hEditLogin, WM_SETTEXT, 0, (LPARAM)LOGIN);
+					isEmptyLoginField = TRUE;
+				}
+				
+			}
+		}
 		break;
 		case IDOK:
 			MessageBox(NULL, "Была нажата кнопка 'ОК' ", "Info", MB_OK | MB_ICONINFORMATION);
