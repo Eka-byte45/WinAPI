@@ -1,5 +1,6 @@
 #include<Windows.h>
 #include"resource1.h"
+#include<string>
 
 CONST CHAR* g_sz_VALUES[] = { "This","is","my","first","Combo","Box" };
 
@@ -29,6 +30,20 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		switch (LOWORD(wParam))
 		{
 		case IDOK:
+		{
+			HWND hCombo = GetDlgItem(hwnd, IDC_COMBO1);
+			int index = SendMessage(hCombo, CB_GETCURSEL, 0, 0);
+			if (index != CB_ERR)
+			{
+				CONST INT SIZE = 256;
+				CHAR buffer[SIZE] = {};
+				SendMessage(hCombo, CB_GETLBTEXT, index, (LPARAM)buffer);
+				std::string message = "Вы выбрали элемент №" + std::to_string(index) + " со значением " + buffer;
+				
+				MessageBox(hwnd, message.c_str(), "Выбор элемента", MB_OK | MB_ICONINFORMATION);
+			}
+		}
+			
 			break;
 		case IDCANCEL:
 			EndDialog(hwnd, 0);
