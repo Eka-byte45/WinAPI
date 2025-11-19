@@ -32,7 +32,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDOK:
 		{
 			HWND hCombo = GetDlgItem(hwnd, IDC_COMBO1);
-			int index = SendMessage(hCombo, CB_GETCURSEL, 0, 0);
+			int index = SendMessage(hCombo, CB_GETCURSEL, 0, 0);//GetCurrentSelection - получить текущий, выбранный элемент
 			if (index != CB_ERR)
 			{
 				CONST INT SIZE = 256;
@@ -40,7 +40,11 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				SendMessage(hCombo, CB_GETLBTEXT, index, (LPARAM)buffer);
 				std::string message = "Вы выбрали элемент №" + std::to_string(index) + " со значением " + buffer;
 				
-				MessageBox(hwnd, message.c_str(), "Выбор элемента", MB_OK | MB_ICONINFORMATION);
+				MessageBox(hwnd, message.c_str(), "Info", MB_OK | MB_ICONINFORMATION);
+			}
+			else
+			{
+				MessageBox(hwnd, "Вы ничего не выбрали", "Info", MB_OK | MB_ICONINFORMATION);
 			}
 		}
 			
