@@ -12,7 +12,7 @@ HINSTANCE hInstanceG;
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
 	hInstanceG = hInstance;
-	DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), NULL,(DLGPROC)DlgProc, 0);
+	DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_DIALOG2), NULL,(DLGPROC)DlgProc, 0);
 	
 	return 0;
 }
