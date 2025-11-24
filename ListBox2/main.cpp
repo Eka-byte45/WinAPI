@@ -8,6 +8,7 @@ BOOL CALLBACK DlgProcChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
+	//hInstance - это экземпляр исполняемго файа программы, загруженного в память(.exe)
 	DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_DIALOG_MAIN), NULL, (DLGPROC)DlgProc, 0);
 
 	return 0;
@@ -26,15 +27,17 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)g_sz_VALUES[i]);
 		break;
 
-	case WM_KEYDOWN:
+	case WM_KEYUP:
+	{
 		if (wParam == VK_RETURN)
 		{
 			MessageBox(hwnd, "Вы нажали Enter", "Сообщение", MB_OK);
-			hListBox = GetDlgItem(hwnd, IDC_LIST1); 
-			int selIndex = SendMessage(hListBox, LB_GETCURSEL, 0, 0);
-			if (selIndex >= 0)
-			DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, (DLGPROC)DlgProcChange, 0);
+			//hListBox = GetDlgItem(hwnd, IDC_LIST1); 
+			//INT selIndex = SendMessage(hListBox, LB_GETCURSEL, 0, 0);
+			//if (selIndex >= 0)
+			//DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, (DLGPROC)DlgProcChange, 0);
 		}
+	}
 		break;
 	
 	case WM_COMMAND:
@@ -48,11 +51,11 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				CONST INT SIZE = 256;
 				CHAR sz_buffer[SIZE];
 
-				HWND hList = (HWND)lParam;
-				INT i = SendMessage(hList, LB_GETCURSEL, 0, 0);
-				SendMessage(hList, LB_GETTEXT, i, (LPARAM)sz_buffer);
-
-				DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, (DLGPROC)DlgProcChange, 0);
+				HWND hList = (HWND)lParam;//получаем дескриптор через lParam текущего активного списка
+				INT i = SendMessage(hList, LB_GETCURSEL, 0, 0);//получаем индекс 
+				SendMessage(hList, LB_GETTEXT, i, (LPARAM)sz_buffer);//запрашиваем содержимое выбранного элемента
+				//GetModuleHandle(NULL) - возвращает 'hInstance' нашей программы
+				DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, (DLGPROC)DlgProcChange, 0);//открываем диалоговое окно
 			}
 
 		}
@@ -135,9 +138,9 @@ BOOL CALLBACK DlgProcChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)"Изменить");
 		SendMessage(GetDlgItem(hwnd, IDOK), WM_SETTEXT, 0, (LPARAM)"Сохранить");
 
-		HWND hParent = GetParent(hwnd);
-		HWND hListBox = GetDlgItem(hParent, IDC_LIST1);
-		HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
+		HWND hParent = GetParent(hwnd);//дескриптор родительского окна
+		HWND hListBox = GetDlgItem(hParent, IDC_LIST1);//получ дескриптора упэранта ищем лист бокс
+		HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);//получение дескриптора текстового поля
 
 		CONST INT SIZE = 256;
 		CHAR sz_buffer[SIZE];
@@ -147,6 +150,7 @@ BOOL CALLBACK DlgProcChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 
 		SetFocus(hEdit);
+		SendMessage(hEdit, EM_SETSEL, SIZE, -1);
 	}
 	break;
 
@@ -155,7 +159,7 @@ BOOL CALLBACK DlgProcChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 		case IDOK:
 		{
-			/*HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
+			HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
 			HWND hParent = GetParent(hwnd);
 			HWND hListBox = GetDlgItem(hParent, IDC_LIST1);
 
@@ -172,50 +176,46 @@ BOOL CALLBACK DlgProcChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				EndDialog(hwnd, 0);
 			}
 			else
-				MessageBox(hwnd, "Значение уже присутствует в списке", "Info", MB_OK | MB_ICONINFORMATION);*/
+				MessageBox(hwnd, "Значение уже присутствует в списке", "Info", MB_OK | MB_ICONINFORMATION);
 
-			HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
-			HWND hParent = GetParent(hwnd);
-			HWND hListBox = GetDlgItem(hParent, IDC_LIST1);
+			//HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
+			//HWND hParent = GetParent(hwnd);
+			//HWND hListBox = GetDlgItem(hParent, IDC_LIST1);
 
-			CONST INT SIZE = 256;
-			CHAR sz_buffer[SIZE];
-			SendMessage(hEdit, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
+			//CONST INT SIZE = 256;
+			//CHAR sz_buffer[SIZE];
+			//SendMessage(hEdit, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
 
-			// Сохраняем индекс текущего элемента для последующего обновления
-			INT currentIndex = SendMessage(hListBox, LB_GETCURSEL, 0, 0);
+			//// Сохраняем индекс текущего элемента для последующего обновления
+			//INT currentIndex = SendMessage(hListBox, LB_GETCURSEL, 0, 0);
 
-			// Ручной перебор всех элементов списка для точного сравнения строк
-			for (INT j = 0; j < SendMessage(hListBox, LB_GETCOUNT, 0, 0); j++)
-			{
-				CHAR tempBuffer[SIZE];
-				SendMessage(hListBox, LB_GETTEXT, j, (LPARAM)tempBuffer);
+			//// Ручной перебор всех элементов списка для точного сравнения строк
+			//for (INT j = 0; j < SendMessage(hListBox, LB_GETCOUNT, 0, 0); j++)
+			//{
+			//	CHAR tempBuffer[SIZE];
+			//	SendMessage(hListBox, LB_GETTEXT, j, (LPARAM)tempBuffer);
 
-				// Регистронезависимый поиск совпадений
-				if (_stricmp(tempBuffer, sz_buffer) == 0)
-				{
-					// Совпадение найдено
-					MessageBox(hwnd, "Значение уже присутствует в списке", "Info", MB_OK | MB_ICONINFORMATION);
-					return FALSE; // Выходим из процедуры без дальнейших действий
-				}
-			}
+			//	// Регистронезависимый поиск совпадений
+			//	if (_stricmp(tempBuffer, sz_buffer) == 0)
+			//	{
+			//		// Совпадение найдено
+			//		MessageBox(hwnd, "Значение уже присутствует в списке", "Info", MB_OK | MB_ICONINFORMATION);
+			//		return FALSE; // Выходим из процедуры без дальнейших действий
+			//	}
+			//}
 
-			// Если цикл завершился без нахождения совпадений, обновляем элемент
-			SendMessage(hListBox, LB_DELETESTRING, currentIndex, 0);
-			SendMessage(hListBox, LB_INSERTSTRING, currentIndex, (LPARAM)sz_buffer);
+			//// Если цикл завершился без нахождения совпадений, обновляем элемент
+			//SendMessage(hListBox, LB_DELETESTRING, currentIndex, 0);
+			//SendMessage(hListBox, LB_INSERTSTRING, currentIndex, (LPARAM)sz_buffer);
 			EndDialog(hwnd, 0);
 		}
-		break;
-
 		case IDCANCEL:
-			EndDialog(hwnd, IDCANCEL);
-			break;
+			EndDialog(hwnd, 0);
 		}
-		break;
-
+			break;
 	case WM_CLOSE:
-		EndDialog(hwnd, IDCANCEL);
-		break;
+		EndDialog(hwnd, 0);
+
 	}
 	return FALSE;
 }
