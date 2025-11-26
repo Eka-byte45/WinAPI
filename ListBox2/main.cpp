@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<Windows.h>
 #include"resource.h"
 
@@ -5,6 +6,8 @@ CONST CHAR* g_sz_VALUES[] = { "This","is","my","first","List","Box" };
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 BOOL CALLBACK DlgProcAdd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 BOOL CALLBACK DlgProcChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+VOID SaveList(HWND hwnd, CONST CHAR filename[]);
+
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -25,19 +28,6 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		SetFocus(hListBox);
 		for (int i = 0; i < sizeof(g_sz_VALUES) / sizeof(g_sz_VALUES[0]); ++i)
 			SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)g_sz_VALUES[i]);
-		break;
-
-	case WM_KEYUP:
-	{
-		if (wParam == VK_RETURN)
-		{
-			MessageBox(hwnd, "Вы нажали Enter", "Сообщение", MB_OK);
-			//hListBox = GetDlgItem(hwnd, IDC_LIST1); 
-			//INT selIndex = SendMessage(hListBox, LB_GETCURSEL, 0, 0);
-			//if (selIndex >= 0)
-			//DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, (DLGPROC)DlgProcChange, 0);
-		}
-	}
 		break;
 	
 	case WM_COMMAND:
@@ -76,11 +66,29 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDOK:
 			break;
 		case IDCANCEL:
+			SaveList(hwnd, "list.txt");
 			EndDialog(hwnd, 0);
+			//break;
+		case WM_KEYUP:
+		{
+			switch (LOWORD(wParam))
+			{
+			case VK_SPACE:
+			{
+				HWND hList = GetDlgItem(hwnd, IDC_LIST1);
+				if (GetFocus() == hList)
+				{
+					DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, (DLGPROC)DlgProcChange, 0);
+				}
+			}
 			break;
+			}
+		}
+		break;
 		case WM_CLOSE:
+			SaveList(hwnd, "list.txt");
 			EndDialog(hwnd, 0);
-			break;
+			//break;
 		}
 		
 	}
@@ -122,7 +130,6 @@ BOOL CALLBACK DlgProcAdd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			EndDialog(hwnd, 0);
 		}
 		break;
-	
 	case WM_CLOSE:
 		EndDialog(hwnd, 0);
 	}
@@ -218,4 +225,30 @@ BOOL CALLBACK DlgProcChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	}
 	return FALSE;
+}
+VOID SaveList(HWND hwnd, CONST CHAR filename[])
+{
+	CONST INT SIZE = 32768;
+	CHAR sz_buffer[SIZE] = {};
+
+	HWND hList = GetDlgItem(hwnd, IDC_LIST1);
+	INT n = SendMessage(hList, LB_GETCOUNT, 0, 0);
+
+	for (int i = 0; i < n; ++i)
+	{
+		CHAR sz_item[256] = {};
+		SendMessage(hList, LB_GETTEXT, i, (LPARAM)sz_item);
+		strcat(sz_buffer, sz_item);
+		strcat(sz_buffer, "\n");
+		/*
+		lstrcat(sz_buffer, sz_item);
+		lstrcat(sz_buffer, "\n");
+		*/
+		
+	}
+	HANDLE hFile = CreateFile(filename,GENERIC_WRITE,0,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
+	DWORD dwBytesWriten = 0;
+	WriteFile(hFile, sz_buffer, strlen(sz_buffer) + 1, &dwBytesWriten, NULL);
+	CloseHandle(hFile);
+
 }
