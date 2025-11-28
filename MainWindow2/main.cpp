@@ -1,5 +1,5 @@
 #include<Windows.h>
-#include"resource1.h"
+#include"resource.h"
 
 CONST CHAR g_sz_WINDOW_CLASS[] = "My first window";
 
@@ -20,22 +20,22 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wClass.cbWndExtra = 0;
 
 	//Инициализируем внешний вид окон:
-	//wClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_BITCOIN));
-	//wClass.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_PALM));
-	
-	wClass.hIcon =(HICON) LoadImage(NULL,"bitcoin.ico",IMAGE_ICON,LR_DEFAULTSIZE,LR_DEFAULTSIZE,LR_LOADFROMFILE);
-	wClass.hIconSm = (HICON)LoadImage(NULL, "palm.ico",IMAGE_ICON,LR_DEFAULTSIZE,LR_DEFAULTSIZE,LR_LOADFROMFILE);
+	wClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_BITCOIN));
+	wClass.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_PALM));
+
+	//wClass.hIcon = (HICON)LoadImage(NULL, "bitcoin.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+	//wClass.hIconSm = (HICON)LoadImage(NULL, "palm.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
 
 	//wClass.hCursor = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR1));
-	wClass.hCursor = (HCURSOR)LoadImage
-	(   hInstance,
+	/*wClass.hCursor = (HCURSOR)LoadImage
+	(hInstance,
 		"starcraft-original\\Working In Background.ani",
 		IMAGE_CURSOR,
 		LR_DEFAULTSIZE,
 		LR_DEFAULTSIZE,
 		LR_LOADFROMFILE
-	);
-	wClass.hbrBackground =(HBRUSH)(COLOR_WINDOW + 1);
+	);*/
+	wClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
 	//Инициализация системных переменных:
 	wClass.hInstance = hInstance;
@@ -45,7 +45,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 	if (RegisterClassEx(&wClass) == NULL)
 	{
-		MessageBox(NULL, "Class registration failed",NULL, MB_OK | MB_ICONERROR);
+		MessageBox(NULL, "Class registration failed", NULL, MB_OK | MB_ICONERROR);
 		return 0;
 	}
 
@@ -58,7 +58,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 		WS_OVERLAPPEDWINDOW,//Стиль окна. Стили всегда зависят от класса окна.WS_OVERLAPPEDWINDOW - Означает главное окно
 		CW_USEDEFAULT, CW_USEDEFAULT,//Position
 		//CW_USEDEFAULT, CW_USEDEFAULT,//Размер окна
-		640,480,
+		640, 480,
 		NULL,
 		NULL,//Для главного окна это ResourceID главного меню, для дочернего окна (Control) - ResourceID дочернего окна(IDC_BUTTON_COPY)
 		hInstance,
@@ -79,7 +79,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 		TranslateMessage(&msg);//Преобразует сообщения виртуальных клавиш в символьные сообщения
 		DispatchMessage(&msg);//Отправляет сообщение в процедуру окна
 	}
-	
+
 	return msg.wParam;
 }
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)

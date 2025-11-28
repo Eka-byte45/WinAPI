@@ -29,4 +29,12 @@
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="bitcoin.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="palm.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
