@@ -1,5 +1,7 @@
+п»ї#define _CRT_SECURE_NO_WARNINGS
 #include<Windows.h>
 #include"resource1.h"
+#include<stdio.h>
 
 CONST CHAR g_sz_WINDOW_CLASS[] = "My first window";
 
@@ -7,19 +9,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
-	//1)Регистарция класса окна. На этом этапе класс нашего окна регистрируется в ОС.
-	//Класс окна это не тип данных, как в ООП, класс любого окна представляет собой
-	//самую обычную строку с именем класса.
+	//1)Р РµРіРёСЃС‚Р°СЂС†РёСЏ РєР»Р°СЃСЃР° РѕРєРЅР°. РќР° СЌС‚РѕРј СЌС‚Р°РїРµ РєР»Р°СЃСЃ РЅР°С€РµРіРѕ РѕРєРЅР° СЂРµРіРёСЃС‚СЂРёСЂСѓРµС‚СЃСЏ РІ РћРЎ.
+	//РљР»Р°СЃСЃ РѕРєРЅР° СЌС‚Рѕ РЅРµ С‚РёРї РґР°РЅРЅС‹С…, РєР°Рє РІ РћРћРџ, РєР»Р°СЃСЃ Р»СЋР±РѕРіРѕ РѕРєРЅР° РїСЂРµРґСЃС‚Р°РІР»СЏРµС‚ СЃРѕР±РѕР№
+	//СЃР°РјСѓСЋ РѕР±С‹С‡РЅСѓСЋ СЃС‚СЂРѕРєСѓ СЃ РёРјРµРЅРµРј РєР»Р°СЃСЃР°.
 	WNDCLASSEX wClass;
 	ZeroMemory(&wClass, sizeof(wClass));
 
-	//Инициализируем размеры и стиль:
+	//РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј СЂР°Р·РјРµСЂС‹ Рё СЃС‚РёР»СЊ:
 	wClass.style = NULL;
 	wClass.cbSize = sizeof(wClass); //cb_ - Count Bytes
 	wClass.cbClsExtra = 0;
 	wClass.cbWndExtra = 0;
 
-	//Инициализируем внешний вид окон:
+	//РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РІРЅРµС€РЅРёР№ РІРёРґ РѕРєРѕРЅ:
 	//wClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_BITCOIN));
 	//wClass.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_PALM));
 	
@@ -37,7 +39,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	);
 	wClass.hbrBackground =(HBRUSH)(COLOR_WINDOW + 1);
 
-	//Инициализация системных переменных:
+	//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃРёСЃС‚РµРјРЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…:
 	wClass.hInstance = hInstance;
 	wClass.lpszClassName = g_sz_WINDOW_CLASS;
 	wClass.lpszMenuName = NULL;
@@ -49,18 +51,28 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 		return 0;
 	}
 
-	//2)Создание окна:
+	//2)РЎРѕР·РґР°РЅРёРµ РѕРєРЅР°:
+	int width = GetSystemMetrics(SM_CXSCREEN);
+	int heigth = GetSystemMetrics(SM_CYSCREEN);
+	int windowWidth = 0.75f * width;
+	int windowHeigth = 0.75f * heigth;
+
+	int centerX = (width - windowWidth) / 2;
+	int centerY = (heigth - windowHeigth) / 2;
+
 	HWND hwnd = CreateWindowEx
 	(
 		NULL,//exStyle
-		g_sz_WINDOW_CLASS, //имя класса окна
-		g_sz_WINDOW_CLASS,//Заголовок окна
-		WS_OVERLAPPEDWINDOW,//Стиль окна. Стили всегда зависят от класса окна.WS_OVERLAPPEDWINDOW - Означает главное окно
-		CW_USEDEFAULT, CW_USEDEFAULT,//Position
-		//CW_USEDEFAULT, CW_USEDEFAULT,//Размер окна
-		640,480,
+		g_sz_WINDOW_CLASS, //РёРјСЏ РєР»Р°СЃСЃР° РѕРєРЅР°
+		g_sz_WINDOW_CLASS,//Р—Р°РіРѕР»РѕРІРѕРє РѕРєРЅР°
+		WS_OVERLAPPEDWINDOW,//РЎС‚РёР»СЊ РѕРєРЅР°. РЎС‚РёР»Рё РІСЃРµРіРґР° Р·Р°РІРёСЃСЏС‚ РѕС‚ РєР»Р°СЃСЃР° РѕРєРЅР°.WS_OVERLAPPEDWINDOW - РћР·РЅР°С‡Р°РµС‚ РіР»Р°РІРЅРѕРµ РѕРєРЅРѕ
+		//CW_USEDEFAULT, CW_USEDEFAULT,//Position
+		centerX, centerY,
+		//CW_USEDEFAULT, CW_USEDEFAULT,//Р Р°Р·РјРµСЂ РѕРєРЅР°
+		//640,480,
+		windowWidth,windowHeigth,
 		NULL,
-		NULL,//Для главного окна это ResourceID главного меню, для дочернего окна (Control) - ResourceID дочернего окна(IDC_BUTTON_COPY)
+		NULL,//Р”Р»СЏ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° СЌС‚Рѕ ResourceID РіР»Р°РІРЅРѕРіРѕ РјРµРЅСЋ, РґР»СЏ РґРѕС‡РµСЂРЅРµРіРѕ РѕРєРЅР° (Control) - ResourceID РґРѕС‡РµСЂРЅРµРіРѕ РѕРєРЅР°(IDC_BUTTON_COPY)
 		hInstance,
 		NULL
 
@@ -69,21 +81,23 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	{
 		MessageBox(NULL, "Windows creation failed", NULL, MB_OK | MB_ICONERROR);
 		return 0;
-	}ShowWindow(hwnd, nCmdShow);//Задает режим отображения окна - Развернуто на весь экран, Свернуто в окно,Свернуто на панель задач
-	UpdateWindow(hwnd);//Обновляет клиентскую область указанного окна, отправляя сообщение WM_PAINT,если клиентская область окна не пустая
+	}ShowWindow(hwnd, nCmdShow);//Р—Р°РґР°РµС‚ СЂРµР¶РёРј РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РѕРєРЅР° - Р Р°Р·РІРµСЂРЅСѓС‚Рѕ РЅР° РІРµСЃСЊ СЌРєСЂР°РЅ, РЎРІРµСЂРЅСѓС‚Рѕ РІ РѕРєРЅРѕ,РЎРІРµСЂРЅСѓС‚Рѕ РЅР° РїР°РЅРµР»СЊ Р·Р°РґР°С‡
+	UpdateWindow(hwnd);//РћР±РЅРѕРІР»СЏРµС‚ РєР»РёРµРЅС‚СЃРєСѓСЋ РѕР±Р»Р°СЃС‚СЊ СѓРєР°Р·Р°РЅРЅРѕРіРѕ РѕРєРЅР°, РѕС‚РїСЂР°РІР»СЏСЏ СЃРѕРѕР±С‰РµРЅРёРµ WM_PAINT,РµСЃР»Рё РєР»РёРµРЅС‚СЃРєР°СЏ РѕР±Р»Р°СЃС‚СЊ РѕРєРЅР° РЅРµ РїСѓСЃС‚Р°СЏ
 
-	//3)Запуск цикла сообщений:
+	//3)Р—Р°РїСѓСЃРє С†РёРєР»Р° СЃРѕРѕР±С‰РµРЅРёР№:
 	MSG msg = {};
 	while (GetMessage(&msg, NULL, 0, 0) > 0)
 	{
-		TranslateMessage(&msg);//Преобразует сообщения виртуальных клавиш в символьные сообщения
-		DispatchMessage(&msg);//Отправляет сообщение в процедуру окна
+		TranslateMessage(&msg);//РџСЂРµРѕР±СЂР°Р·СѓРµС‚ СЃРѕРѕР±С‰РµРЅРёСЏ РІРёСЂС‚СѓР°Р»СЊРЅС‹С… РєР»Р°РІРёС€ РІ СЃРёРјРІРѕР»СЊРЅС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ
+		DispatchMessage(&msg);//РћС‚РїСЂР°РІР»СЏРµС‚ СЃРѕРѕР±С‰РµРЅРёРµ РІ РїСЂРѕС†РµРґСѓСЂСѓ РѕРєРЅР°
 	}
 	
 	return msg.wParam;
 }
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	static int prevWidth = -1;
+	static int prevHeigth = -1;
 	switch (uMsg)
 	{
 	case WM_CREATE:
@@ -91,6 +105,35 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_COMMAND:
 		break;
+
+	case WM_MOVE:
+	{
+		RECT rc;
+		GetWindowRect(hwnd,&rc);
+		CONST INT SIZE = 256;
+		char titleBuff[SIZE] = "";
+		sprintf(titleBuff, "%s: РїРѕР·РёС†РёСЏ %dx%d", g_sz_WINDOW_CLASS,rc.left,rc.top);
+		SetWindowText(hwnd, titleBuff);
+	}
+		break;
+	case WM_SIZE:
+	{
+		int currentWidth = LOWORD(lParam);
+		int currentHeigth = HIWORD(lParam);
+		if (currentHeigth != prevHeigth || currentWidth != prevWidth)
+		{
+			RECT rc;
+			GetWindowRect(hwnd, &rc);
+			CONST INT SIZE = 256;
+			char titleBuff[SIZE] = "";
+			sprintf(titleBuff, "%s: СЂР°Р·РјРµСЂ %dx%d", g_sz_WINDOW_CLASS, currentWidth,currentHeigth);
+			SetWindowText(hwnd, titleBuff);
+			prevHeigth = currentHeigth;
+			prevWidth = currentWidth;
+		}
+		
+	}
+	break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
@@ -102,3 +145,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	return FALSE;
 }
+
+//https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics
+//https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowrect
