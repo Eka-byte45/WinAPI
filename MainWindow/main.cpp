@@ -3,6 +3,7 @@
 #include"resource1.h"
 #include<stdio.h>
 
+#define IDC_BUTTON 1000
 CONST CHAR g_sz_WINDOW_CLASS[] = "My first window";
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -101,19 +102,45 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	switch (uMsg)
 	{
 	case WM_CREATE:
+	{
 		//MessageBox(hwnd, "Cursor check", "Info", MB_OK | MB_ICONINFORMATION);
+		HWND hButton = CreateWindowEx
+		(
+			NULL,//exStyle
+			"Button",//Class
+			"Кнопка",//Title
+			WS_CHILD | WS_VISIBLE,//Style
+			10, 10,//Position
+			150, 80,//Size
+			hwnd,//Parent
+			(HMENU)IDC_BUTTON,
+			//(HMENU)1000,//Для главного окна - это ResourceID главного меню
+			//Для дочернего окна(элемента управления окна) - это ResourceID дочернего элемента
+			GetModuleHandle(NULL),//hInstance
+			NULL//???
+		);
+	}	
 		break;
 	case WM_COMMAND:
+	{
+		switch (LOWORD(wParam))
+		{
+		case IDC_BUTTON:
+			MessageBox(hwnd, "Cursor check", "Info", MB_OK | MB_ICONINFORMATION);
+			break;
+		}
+	}
 		break;
 
 	case WM_MOVE:
 	{
-		RECT rc;
+		RECT rc = {};
 		GetWindowRect(hwnd,&rc);
 		CONST INT SIZE = 256;
-		char titleBuff[SIZE] = "";
+		CHAR titleBuff[SIZE] = {};
 		sprintf(titleBuff, "%s: позиция %dx%d", g_sz_WINDOW_CLASS,rc.left,rc.top);
-		SetWindowText(hwnd, titleBuff);
+		//SetWindowText(hwnd, titleBuff);
+		SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)titleBuff);
 	}
 		break;
 	case WM_SIZE:
@@ -122,10 +149,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		int currentHeigth = HIWORD(lParam);
 		if (currentHeigth != prevHeigth || currentWidth != prevWidth)
 		{
-			RECT rc;
+			RECT rc = {};
 			GetWindowRect(hwnd, &rc);
 			CONST INT SIZE = 256;
-			char titleBuff[SIZE] = "";
+			char titleBuff[SIZE] = {};
 			sprintf(titleBuff, "%s: размер %dx%d", g_sz_WINDOW_CLASS, currentWidth,currentHeigth);
 			SetWindowText(hwnd, titleBuff);
 			prevHeigth = currentHeigth;
