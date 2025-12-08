@@ -237,11 +237,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		if (LOWORD(wParam) == IDC_BUTTON_POINT)
 		{
+			if (input_operation)
+			{
+				sz_buffer[0] = '0';
+				sz_buffer[1] = '.';
+				sz_buffer[2] = 0;
+				input_operation = FALSE;
+			}
 			if (strchr(sz_buffer, '.')==0)strcat_s(sz_buffer, ".");
 			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)sz_buffer);
+			input = TRUE;
 		}
 		if (LOWORD(wParam) == IDC_BUTTON_BSP)
 		{
+			if (!input)break;
 			if (strlen(sz_buffer) == 1)
 			{
 				sz_buffer[0] = '0';
@@ -279,7 +288,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				else b = atof(sz_buffer);
 				input = FALSE;
 			}
-			
+			if (b == DBL_MIN)break;
 			switch (operation)
 			{
 			case IDC_BUTTON_PLUS:  a += b;	break;
