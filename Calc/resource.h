@@ -2,6 +2,10 @@
 // Microsoft Visual C++ generated include file.
 // Used by Resource.rc
 
+#define IDM_EXIT			200
+#define IDM_SQUARE_BLUE		201
+#define IDM_METAL_MISTRAL	202
+
 #define IDC_DISPLAY			999
 #define IDC_BUTTON_0		1000
 #define IDC_BUTTON_1		1001
@@ -23,6 +27,7 @@
 #define IDC_BUTTON_BSP		1015	//Backspace
 #define IDC_BUTTON_CLR		1016	//Clear
 #define IDC_BUTTON_EQUAL	1017	// =
+
 
 // Next default values for new objects
 // 
