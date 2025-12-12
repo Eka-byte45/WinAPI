@@ -9,7 +9,9 @@ CONST INT g_i_INTERVAL = 1;
 CONST INT g_i_DISPLAY_INTERVAL = 10;
 CONST INT g_i_DOUBLE_BUTTON_SIZE = g_i_BUTTON_SIZE * 2 + g_i_INTERVAL;
 CONST INT g_i_DISPLAY_WIDTH = g_i_BUTTON_SIZE*5 + g_i_INTERVAL * 4;
-CONST INT g_i_DISPLAY_HEIGHT = 22;
+CONST INT g_i_DISPLAY_HEIGHT = g_i_BUTTON_SIZE;
+CONST INT g_i_FONT_HEIGHT = g_i_DISPLAY_HEIGHT - 2;
+CONST INT g_i_FONT_WIDTH = g_i_FONT_HEIGHT / 2.5;
 CONST INT g_i_START_X = 10;
 CONST INT g_i_START_Y = 10;
 CONST INT g_i_BUTTON_START_X = g_i_START_X;
@@ -95,7 +97,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		AllocConsole();
 		freopen("CONOUT$", "w", stdout);
-		CreateWindowEx
+		HWND hEdit = CreateWindowEx
 		(
 			NULL,
 			"Edit",
@@ -108,6 +110,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),//hInstance
 			NULL
 		);
+		AddFontResourceEx("Fonts\\digital-7.ttf", FR_PRIVATE, 0);
+		HFONT hFont = CreateFont
+		(
+			g_i_FONT_HEIGHT,g_i_FONT_WIDTH,
+			0,0,
+			FW_BOLD,//Bold
+			FALSE,//Italic
+			FALSE,//UnderLine
+			FALSE,//strikeOut
+			DEFAULT_CHARSET,
+			OUT_TT_PRECIS,
+			CLIP_TT_ALWAYS,
+			ANTIALIASED_QUALITY,
+			FF_DONTCARE,
+			"Digital-7"
+		);
+		SendMessage(hEdit, WM_SETFONT, (WPARAM)hFont, TRUE);
 		CHAR sz_button[2] = {};
 		
 		for (int i = 6; i >= 0; i -= 3)
@@ -443,22 +462,22 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 VOID SetSkin(HWND hwnd, CONST CHAR skin[])
 {
-	// Определяем новый цвет фона окна
-	HBRUSH newBackgroundColor = NULL;
-	if (strcmp(skin, "square_blue") == 0)
-	{
-		newBackgroundColor = CreateSolidBrush(RGB(255, 191, 143));
-	}
-	else if (strcmp(skin, "metal_mistral") == 0)
-	{
-		newBackgroundColor = CreateSolidBrush(RGB(111, 111, 111));
-	}
+	//// Определяем новый цвет фона окна
+	//HBRUSH newBackgroundColor = NULL;
+	//if (strcmp(skin, "square_blue") == 0)
+	//{
+	//	newBackgroundColor = CreateSolidBrush(RGB(255, 191, 143));
+	//}
+	//else if (strcmp(skin, "metal_mistral") == 0)
+	//{
+	//	newBackgroundColor = CreateSolidBrush(RGB(111, 111, 111));
+	//}
 
-	// Устанавливаем новую кисть фона окна
-	SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)newBackgroundColor);
+	//// Устанавливаем новую кисть фона окна
+	//SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)newBackgroundColor);
 
-	// Принудительная перерисовка окна для обновления фона
-	RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN);
+	//// Принудительная перерисовка окна для обновления фона
+	//RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN);
 
 	CHAR sz_filename[FILENAME_MAX] = {};
 	for (int i = 0; i <= 10; i++)
@@ -496,5 +515,4 @@ VOID SetSkin(HWND hwnd, CONST CHAR skin[])
 		);
 		SendMessage(hButton, BM_SETIMAGE, 0, (LPARAM)bmpButton);
 	}
-	
 }
