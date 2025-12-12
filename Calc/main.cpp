@@ -23,7 +23,6 @@ CONST INT g_i_WINDOW_HEIGHT = g_i_DISPLAY_HEIGHT + g_i_START_Y + (g_i_BUTTON_SIZ
 
 CONST CHAR g_OPERATIONS[] = "+-*/";
 
-
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 VOID SetSkin(HWND hwnd, CONST CHAR skin[]);
 
@@ -42,6 +41,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 	wClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	//wClass.hbrBackground = CreateSolidBrush(RGB(0, 127, 255));
 
 	wClass.hInstance = hInstance;
 	wClass.lpszMenuName = NULL;
@@ -443,6 +443,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 VOID SetSkin(HWND hwnd, CONST CHAR skin[])
 {
+	// Определяем новый цвет фона окна
+	HBRUSH newBackgroundColor = NULL;
+	if (strcmp(skin, "square_blue") == 0)
+	{
+		newBackgroundColor = CreateSolidBrush(RGB(255, 191, 143));
+	}
+	else if (strcmp(skin, "metal_mistral") == 0)
+	{
+		newBackgroundColor = CreateSolidBrush(RGB(111, 111, 111));
+	}
+
+	// Устанавливаем новую кисть фона окна
+	SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)newBackgroundColor);
+
+	// Принудительная перерисовка окна для обновления фона
+	RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN);
+
 	CHAR sz_filename[FILENAME_MAX] = {};
 	for (int i = 0; i <= 10; i++)
 	{
@@ -459,11 +476,25 @@ VOID SetSkin(HWND hwnd, CONST CHAR skin[])
 		);
 		SendMessage(hButton, BM_SETIMAGE, 0,(LPARAM)bmpButton);
 	}
-	
-	if (IDC_BUTTON_POINT)
+	INT operationButton[] = {IDC_BUTTON_POINT,IDC_BUTTON_PLUS,IDC_BUTTON_MINUS,IDC_BUTTON_ASTER,IDC_BUTTON_SLASH,IDC_BUTTON_BSP,IDC_BUTTON_CLR,IDC_BUTTON_EQUAL};
+	CONST CHAR* operationFileNames[] = { "button_point","button_plus","button_minus","button_aster","button_slash","button_bsp","button_clr","button_equal"};
+
+	for (int i = 0; i <= 7 ; i++)
 	{
-		HWND hButton = GetDlgItem(hwnd, IDC_BUTTON_POINT);
-		
+		CHAR sz_filename[FILENAME_MAX] = {};
+		sprintf(sz_filename, "ButtonsBMP\\%s\\%s.bmp", skin, operationFileNames[i]);
+
+		HWND hButton = GetDlgItem(hwnd, operationButton[i]);
+		HBITMAP bmpButton = (HBITMAP)LoadImage
+		(
+			GetModuleHandle(NULL),
+			sz_filename,
+			IMAGE_BITMAP,
+			g_i_BUTTON_SIZE,
+			i==7 ? g_i_DOUBLE_BUTTON_SIZE : g_i_BUTTON_SIZE,
+			LR_LOADFROMFILE
+		);
 		SendMessage(hButton, BM_SETIMAGE, 0, (LPARAM)bmpButton);
 	}
+	
 }
