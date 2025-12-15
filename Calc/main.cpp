@@ -526,7 +526,7 @@ VOID SetSkinFromDLL(HWND hwnd, CONST CHAR sz_skin[])
 	char dllFilename[MAX_PATH];
 	snprintf(dllFilename, MAX_PATH, "%s.dll", sz_skin);
 
-	HMODULE hButtonsModule = LoadLibrary(dllFilename);
+	HMODULE hButtonsModule = LoadLibrary("square_blue.dll");
 	if (hButtonsModule == NULL) 
 	{
 		MessageBox(hwnd, "Не удалось загрузить DLL для данного скина.", "Ошибка", MB_OK | MB_ICONERROR);
