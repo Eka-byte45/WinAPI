@@ -4,6 +4,29 @@
 
 // Next default values for new objects
 // 
+
+#define IDB_BUTTON_0		1000
+#define IDB_BUTTON_1		1001
+#define IDB_BUTTON_2		1002
+#define IDB_BUTTON_3		1003
+#define IDB_BUTTON_4		1004
+#define IDB_BUTTON_5		1005
+#define IDB_BUTTON_6		1006
+#define IDB_BUTTON_7		1007
+#define IDB_BUTTON_8		1008
+#define IDB_BUTTON_9		1009
+#define IDB_BUTTON_POINT	1010
+
+#define IDB_BUTTON_PLUS		1011
+#define IDB_BUTTON_MINUS	1012
+#define IDB_BUTTON_ASTER	1013	//*
+#define IDB_BUTTON_SLASH	1014
+
+#define IDB_BUTTON_BSP		1015	//Backspace
+#define IDB_BUTTON_CLR		1016	//Clear
+#define IDB_BUTTON_EQUAL	1017	// =
+
+
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

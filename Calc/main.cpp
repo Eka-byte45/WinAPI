@@ -526,7 +526,7 @@ VOID SetSkinFromDLL(HWND hwnd, CONST CHAR sz_skin[])
 	char dllFilename[MAX_PATH];
 	snprintf(dllFilename, MAX_PATH, "%s.dll", sz_skin);
 
-	HMODULE hButtonsModule = LoadLibrary("square_blue.dll");
+	HMODULE hButtonsModule = LoadLibrary(sz_skin);
 	if (hButtonsModule == NULL) 
 	{
 		MessageBox(hwnd, "Не удалось загрузить DLL для данного скина.", "Ошибка", MB_OK | MB_ICONERROR);
@@ -547,25 +547,27 @@ VOID SetSkinFromDLL(HWND hwnd, CONST CHAR sz_skin[])
 
 	};
 
-	for (size_t i = 0; i < sizeof(resourceIds) / sizeof(resourceIds[0]); ++i)
+	//for (size_t i = 0; i < sizeof(resourceIds) / sizeof(resourceIds[0]); ++i)
+	for (size_t i = 1000; i <= 1017; ++i)
 	{
 		HBITMAP bmpButton = (HBITMAP)LoadImage
 		(
 			hButtonsModule,
-			MAKEINTRESOURCE(resourceIds[i]),
+			MAKEINTRESOURCE(i),
 			IMAGE_BITMAP,
 			resourceIds[i] == IDC_BUTTON_0 ? g_i_DOUBLE_BUTTON_SIZE : g_i_BUTTON_SIZE,
 			resourceIds[i] == IDC_BUTTON_EQUAL ? g_i_DOUBLE_BUTTON_SIZE : g_i_BUTTON_SIZE,
 			LR_SHARED
 		);
-
+		std::cout << GetLastError() << std::endl;
 		if (bmpButton == NULL) 
 		{
 			MessageBox(hwnd, "Не удалось загрузить ресурс изображения.", "Ошибка", MB_OK | MB_ICONERROR);
 			continue;
 		}
 
-		SendMessage(GetDlgItem(hwnd, resourceIds[i]), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)bmpButton);
+		SendMessage(GetDlgItem(hwnd, i), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)bmpButton);
+		std::cout << GetLastError() << std::endl;
 	}
 
 	FreeLibrary(hButtonsModule);
