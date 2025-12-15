@@ -7,7 +7,9 @@
 
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-VOID SetSkin(HWND hwnd, CONST CHAR skin[]);
+//VOID SetSkin(HWND hwnd, CONST CHAR skin[]);
+VOID SetSkinFromDLL(HWND hwnd, CONST CHAR sz_skin[]);
+
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -210,7 +212,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
-		SetSkin(hwnd, "square_blue");
+		//SetSkin(hwnd, "square_blue");
+		//SetSkinFromDLL(hwnd, "square_blue");
 	}
 		break;
 		case WM_CTLCOLOREDIT:
@@ -445,7 +448,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDM_EXIT:			SendMessage(hwnd, WM_CLOSE, 0, 0); break;
 		}
 		InvalidateRect(hwnd,0,TRUE);
-		SetSkin(hwnd, g_sz_SKIN[skinID]);
+		SetSkinFromDLL(hwnd, g_sz_SKIN[skinID]);
+		//SetSkin(hwnd, g_sz_SKIN[skinID]);
 		DestroyMenu(cmMain);
 	}
 	break;
@@ -516,3 +520,54 @@ VOID SetSkin(HWND hwnd, CONST CHAR skin[])
 		SendMessage(hButton, BM_SETIMAGE, 0, (LPARAM)bmpButton);
 	}
 }
+
+VOID SetSkinFromDLL(HWND hwnd, CONST CHAR sz_skin[])
+{
+	char dllFilename[MAX_PATH];
+	snprintf(dllFilename, MAX_PATH, "%s.dll", sz_skin);
+
+	HMODULE hButtonsModule = LoadLibrary(dllFilename);
+	if (hButtonsModule == NULL) 
+	{
+		MessageBox(hwnd, "Не удалось загрузить DLL для данного скина.", "Ошибка", MB_OK | MB_ICONERROR);
+		return;
+	}
+
+	static const UINT resourceIds[] =
+	{
+		IDC_BUTTON_0, IDC_BUTTON_1,IDC_BUTTON_2,IDC_BUTTON_3,IDC_BUTTON_4,IDC_BUTTON_5,IDC_BUTTON_6,IDC_BUTTON_7,IDC_BUTTON_8,IDC_BUTTON_9,
+		IDC_BUTTON_ASTER,
+		IDC_BUTTON_BSP,
+		IDC_BUTTON_CLR,
+		IDC_BUTTON_EQUAL,
+		IDC_BUTTON_MINUS,
+		IDC_BUTTON_PLUS,
+		IDC_BUTTON_POINT,
+		IDC_BUTTON_SLASH
+
+	};
+
+	for (size_t i = 0; i < sizeof(resourceIds) / sizeof(resourceIds[0]); ++i)
+	{
+		HBITMAP bmpButton = (HBITMAP)LoadImage
+		(
+			hButtonsModule,
+			MAKEINTRESOURCE(resourceIds[i]),
+			IMAGE_BITMAP,
+			resourceIds[i] == IDC_BUTTON_0 ? g_i_DOUBLE_BUTTON_SIZE : g_i_BUTTON_SIZE,
+			resourceIds[i] == IDC_BUTTON_EQUAL ? g_i_DOUBLE_BUTTON_SIZE : g_i_BUTTON_SIZE,
+			LR_SHARED
+		);
+
+		if (bmpButton == NULL) 
+		{
+			MessageBox(hwnd, "Не удалось загрузить ресурс изображения.", "Ошибка", MB_OK | MB_ICONERROR);
+			continue;
+		}
+
+		SendMessage(GetDlgItem(hwnd, resourceIds[i]), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)bmpButton);
+	}
+
+	FreeLibrary(hButtonsModule);
+}
+
