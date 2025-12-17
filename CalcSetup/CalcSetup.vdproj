@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_00FC0C6DE46A40EF8822EC8DB2FA57BF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_78D7F309E44B4D3098A55762F1F9DFFD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -92,6 +98,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_00FC0C6DE46A40EF8822EC8DB2FA57BF"
+            {
+            "SourcePath" = "8:..\\Calc\\Calculator_37533.ico"
+            "TargetName" = "8:Calculator_37533.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_D731BD1E0BDB4B0BBAB1D8D706894B8F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_78D7F309E44B4D3098A55762F1F9DFFD"
             {
             "SourcePath" = "8:..\\x64\\Debug\\Calc.exe"
@@ -210,6 +236,17 @@
                         {
                         }
                     }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_D731BD1E0BDB4B0BBAB1D8D706894B8F"
+                    {
+                    "Name" = "8:ico"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_D4B544477DFF4042BAF4D5E81298B9D7"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_A2B53F9EF210493C9B6E6DA835FECB54"
@@ -240,7 +277,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CalcSetup"
         "ProductCode" = "8:{8588F0D9-6272-43C8-A625-5B555261174B}"
-        "PackageCode" = "8:{77296B4F-0BA5-4CFB-87CB-4BB29F80C3C6}"
+        "PackageCode" = "8:{F5B8007F-5246-47C0-AD69-C792B6538683}"
         "UpgradeCode" = "8:{B8703415-0A90-42EE-A016-BE6405C5A39A}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -371,7 +408,7 @@
             "Target" = "8:_78D7F309E44B4D3098A55762F1F9DFFD"
             "Folder" = "8:_A2B53F9EF210493C9B6E6DA835FECB54"
             "WorkingFolder" = "8:_9938C41403CF4423ADE7D47BEA8FF5A7"
-            "Icon" = "8:"
+            "Icon" = "8:_00FC0C6DE46A40EF8822EC8DB2FA57BF"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_FEEAFF91BD28415CAFEA2B4F392DDEB9"
@@ -385,7 +422,7 @@
             "Target" = "8:_78D7F309E44B4D3098A55762F1F9DFFD"
             "Folder" = "8:_464A6B0D153A46AD8B779DA2567B3738"
             "WorkingFolder" = "8:_9938C41403CF4423ADE7D47BEA8FF5A7"
-            "Icon" = "8:"
+            "Icon" = "8:_00FC0C6DE46A40EF8822EC8DB2FA57BF"
             "Feature" = "8:"
             }
         }
