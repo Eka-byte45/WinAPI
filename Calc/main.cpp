@@ -38,7 +38,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 		return 0;
 	}
 
-	//2)Создание окна:
+	//2)Создание окна: 
 	HWND hwnd = CreateWindowEx
 	(
 		NULL, //exStyle
