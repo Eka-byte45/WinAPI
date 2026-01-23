@@ -12,7 +12,7 @@ VOID LoadList(HWND hwnd, CONST CHAR filename[]);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
-	//hInstance - это экземпл€р исполн€емго файа программы, загруженного в пам€ть(.exe)
+	//hInstance - это экземпл€р исполн€емго файла программы, загруженного в пам€ть(.exe)
 	DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_DIALOG_MAIN), NULL, (DLGPROC)DlgProc, 0);
 
 	return 0;
