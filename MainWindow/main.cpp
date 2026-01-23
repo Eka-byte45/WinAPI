@@ -168,7 +168,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		DestroyWindow(hwnd);
 		break;
 	default:
-		return DefWindowProc(hwnd, uMsg, wParam, lParam);
+		return DefWindowProc(hwnd, uMsg, wParam, lParam);//если не обработалось ни одно из сообщений описанных в процедуре окна оно возвращается в очередь сообщений
 	}
 	return FALSE;
 }
