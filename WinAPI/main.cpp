@@ -3,24 +3,24 @@
 
 CONST CHAR LOGIN[] = "Введите имя пользователя";
 
-BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);//CALLBACK - конвенция вызова функции
 
-INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
+INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)// LPSTR lpCmdLine - командная строка,INT nCmdShow - режим отображения окна
 {
 	/*MessageBox
 	(
-		NULL,
-		"Hello WinAPI!", 
-		"MessageBox",
+		NULL,//родительское окна
+		"Hello WinAPI!", //сообщение
+		"MessageBox",//заголовок
 		MB_YESNOCANCEL | MB_ICONERROR |MB_HELP|MB_DEFBUTTON3|MB_SYSTEMMODAL|MB_RIGHT
 	);*/
-	//MB_MessageBox
-	DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_DIALOG_MAIN), NULL, (DLGPROC)DlgProc, 0);
-
+	//MB_-MessageBox
+	DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_DIALOG), NULL, (DLGPROC)DlgProc, 0);
+	//DialogBoxParam - нужна для вызова процедуры окна
 	return 0;
 }
 
-BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)//процедура окна
 {
 	static BOOL isEmptyLoginField = TRUE;
 	switch (uMsg)
@@ -35,7 +35,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		SendMessage(hEditLogin, WM_SETTEXT, 0, (LPARAM)LOGIN);
 
 		//SetFocus(GetDlgItem(hwnd, IDC_EDIT_LOGIN));
-		//SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WN_SETFOCUS, GetDlgItem(hwnd, IDOK), NULL);
+		//SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_SETFOCUS, GetDlgItem(hwnd, IDOK), NULL);
 	}
 		break;
 	case WM_COMMAND: //обрабатывает комманды с клавиатуры и мыши
@@ -92,7 +92,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		               
 		break;
 	case WM_CLOSE:			//выполняется при нажатии кнопки 'X'
-		EndDialog(hwnd, 0);
+		EndDialog(hwnd, 0);//для закрытия крестиком окна
 	}
 	return FALSE;
 }
